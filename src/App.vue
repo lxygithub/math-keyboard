@@ -4,13 +4,11 @@
       <math-render :value.sync="value" :imgshow='!show'></math-render>
       <code @click="a">latex: {{value}}</code>
     </div>
-    <math-keyboard 
+    <math-keyboard
         :show.sync="show"
         v-bind:keypanel='1'
         :value.sync="value"
         :output.sync="output"
-        url='http://localhost:8080/formula'
-        v-bind:writeShow='true'
     ></math-keyboard>
   </div>
 </template>

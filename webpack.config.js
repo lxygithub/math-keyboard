@@ -1,14 +1,16 @@
 var path = require('path')
 var webpack = require('webpack')
+const WebpackZipPlugin = require('webpack-zip-plugin')
 
 module.exports = {
   entry: './src/main.js',
   // entry: './src/lib/index.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: 'dist/',
+    publicPath: './dist/',
     filename: 'math-keyboard.min.js'
   },
+  mode: 'production',
   module: {
     rules: [
       {
@@ -17,12 +19,11 @@ module.exports = {
           'vue-style-loader',
           'css-loader'
         ],
-      },      {
+      }, {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
-          loaders: {
-          }
+          loaders: {}
           // other vue-loader options go here
         }
       },
@@ -70,13 +71,18 @@ if (process.env.NODE_ENV === 'production') {
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
+      sourceMap: false,
       compress: {
         warnings: false
       }
     }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
+    }),
+    new WebpackZipPlugin({
+      initialFile: './dist/release/',  //需要打包的文件夹(一般为dist)
+      endPath: './dist/release/',  //打包到对应目录（一般为当前目录'./'）
+      zipName: 'release.zip' //打包生成的文件名
     })
   ])
 }
