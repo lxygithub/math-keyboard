@@ -1,6 +1,6 @@
 # math-keyboard
 
-> 基于vue项目的移动端数学公式键盘，支持手写
+> 基于vue项目的移动端数学公式键盘
 >
 > fork from: https://github.com/MilkyMoon/math-keyboard
 >做了一些修改
