@@ -4,16 +4,12 @@
     <div class="keyboard-output">
         <span :id="mathinput"
               class="editor"
-              style="background:#fff"
+              style="background:#fff;border:2px solid #0099FF;border-radius:4px;width: 75%"
               @touchstart="cursorDown($event)"
               @touchmove="cursorMove($event)"
-              @touchup="cursorUp($event)"
-        >
+              @touchup="cursorUp($event)">
         </span>
-      <svg viewBox="25 25 50 50" v-show="loading">
-        <circle cx="50" cy="50" r="20" fill="none"></circle>
-      </svg>
-      <a @click="keyhide()">确定</a>
+      <a @click="keyhide()" style="width: 15%">确定</a>
     </div>
     <div class="keyboard-panel" id="keyboard-panel"
          :style="{display:keyorwrite === 1 ? 'unset':'none'}">
@@ -21,17 +17,13 @@
         <div class="keyboard-default-symbol">
           <ul>
             <li v-for="item in keysym" @click="insertar(item.v)"
-            >
+                @touchstart="item.t = true"
+                @touchend="item.t = false"
+                :style="{'background-color':item.t?'#bababa':'#F7F7F7'}">
               <div class="letter-shade"></div>
               <img :src="item.i" v-if="item.i"/>{{item.k}}
             </li>
           </ul>
-          <!--<div class="keyboard-default-symbol-bottom">
-            <ul>
-              <li @click="changepanel(3)">abc</li>
-              <li @click="changepanel(2)">符</li>
-            </ul>
-          </div>-->
         </div>
         <div class="keyboard-default-num">
           <ul>
@@ -46,39 +38,12 @@
         </div>
         <div class="keyboard-default-right">
           <ul>
-            <li @touchstart="backDown('Backspace')" @touchend="backUp('Backspace')"><img :src="img.back"/></li>
+            <li @touchstart="backDown('Backspace')" @touchend="backUp('Backspace')" style="background-color: #F7F7F7;margin-top: 0px"><img :src="img.back"/></li>
             <li v-for="item in keyboardRight"
-                @click="insertar(item.v)">
-              <div class="letter-shade"></div>
-              <img :src="item.i" v-if="item.i"/>{{item.k}}
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="keyboard-panel-symbol" v-if="panel === 2">
-        <div class="keyboard-symbol-left">
-          <ul>
-            <li v-for="item in keysym" @click="insertar(item.v)">
-              <div class="letter-shade"></div>
-              <img :src="item.i" v-if="item.i"/>{{item.k}}
-            </li>
-          </ul>
-          <div class="keyboard-default-symbol-bottom">
-            <ul>
-              <li @click="changepanel(3)">abc</li>
-              <li @click="changepanel(1)">123</li>
-              <li @click="insertar(' ')">空格</li>
-            </ul>
-          </div>
-        </div>
-        <div class="keyboard-default-right">
-          <ul>
-            <li @touchstart="backDown('Backspace')" @touchend="backUp('Backspace')">
-              <div class="letter-shade"></div>
-              <img :src="img.back"/></li>
-            <li v-for="item in keyboardRight"
-                @click="insertar(item.v)">
+                @click="insertar(item.v)"
+                @touchstart="item.t = true"
+                @touchend="item.t = false"
+                :style="{'background-color':item.t?'#bababa':'#F7F7F7'}">
               <div class="letter-shade"></div>
               <img :src="item.i" v-if="item.i"/>{{item.k}}
             </li>
@@ -100,19 +65,15 @@
             </li>
           </ul>
         </div>
-        <!-- <div class="letter-row">
-           <ul>
-             <li @click="changepanel(1)">123</li>
-             <li @click="changepanel(2)">符</li>
-             <li @click="insertar(' ')">空格</li>
-             <li @click="insertar('=')">=</li>
-           </ul>
-         </div>-->
       </div>
       <div class="keyboard-bottom">
         <ul>
+          <li @click="changepanel(panel===1?3:1)" style="font-size: 15px;margin-left: 0px">{{panel===1?'abc':'123'}}</li>
           <li v-for="item in keyBottomSym"
-              @click="item.v==='hide'?keyhide():item.v==='abc'?changepanel(panel===1?3:1):insertar(item.v)">
+              @click="item.v==='hide'?keyhide():insertar(item.v)"
+              @touchstart="item.t = true"
+              @touchend="item.t = false"
+              :style="{'background-color':item.t?'#bababa':'#fff'}">
             <div class="letter-shade"></div>
             <img :src="item.i" v-if="item.i"/>{{item.k}}
           </li>
@@ -227,14 +188,14 @@
                     {k: '.', v: '.', t: false},
                 ],
                 keysym: [
-                    {k: '', v: '\\nthroot', i: img.raiz},
-                    {k: '', v: '\\sqrt', i: img.raiz2},
-                    {k: '', v: '^', i: img.potencia},
-                    {k: '', v: '^2', i: img.cuadrado},
-                    {k: '', v: '|', i: img.abs},
-                    {k: '', v: '/', i: img.fraccion},
-                    {k: '', v: '\\pi', i: img._pi},
-                    {k: '', v: '或', i: img.or},
+                    {k: '', v: '\\nthroot', i: img.raiz, t: false},
+                    {k: '', v: '\\sqrt', i: img.raiz2, t: false},
+                    {k: '', v: '^', i: img.potencia, t: false},
+                    {k: '', v: '^2', i: img.cuadrado, t: false},
+                    {k: '', v: '|', i: img.abs, t: false},
+                    {k: '', v: '/', i: img.fraccion, t: false},
+                    {k: '', v: '\\pi', i: img._pi, t: false},
+                    {k: '', v: '或', i: img.or, t: false},
                     // {k: '', v: '^3', i: img.tercera},
                     // {k: '(', v: '(', i: ''},
                     // {k: ')', v: ')', i: ''},
@@ -276,39 +237,22 @@
                     // {k: '⇔', v: '\\iff', i: ''}
                 ],
                 keyBottomSym: [
-                    {k: '', v: 'abc', i: img.abc},
-                    {k: '', v: 'hide', i: img.hide},
-                    {k: '', v: '<', i: img.less_than},
-                    {k: '', v: '>', i: img.more_than},
-                    {k: '', v: '\\leq', i: img.less_equals},
-                    {k: '', v: '\\geq', i: img.more_equals},
+                    // {k: '', v: 'abc', i: img.abc},
+                    {k: '', v: 'hide', i: img.hide, t: false},
+                    {k: '', v: '<', i: img.less_than, t: false},
+                    {k: '', v: '>', i: img.more_than, t: false},
+                    {k: '', v: '\\leq', i: img.less_equals, t: false},
+                    {k: '', v: '\\geq', i: img.more_equals, t: false},
 
                 ],
                 keyboardRight: [
-                    {k: '', v: '-', i: img.subtract},
-                    {k: '', v: '+', i: img.plus},
-                    {k: '', v: '±', i: img.union}
+                    {k: '', v: '-', i: img.subtract, t: false},
+                    {k: '', v: '+', i: img.plus, t: false},
+                    {k: '', v: '±', i: img.union, t: false}
                 ],
                 latex: this.value,
                 keyshow: this.show,
                 keyorwrite: 1,
-                canvasMoveUse: !1,
-                canvas: null,
-                context: null,// 使用 wx.createContext 获取绘图上下文 context
-                isButtonDown: false,//是否在绘制中
-                arrx: [],//动作横坐标
-                arry: [],//动作纵坐标
-                arrz: [],//总做状态，标识按下到抬起的一个组合
-                canvasw: 0,//画布宽度
-                canvash: 208,//画布高度
-                tmpArr: [],
-                retArr: [],
-                delArr: [],
-                timeid: 0,
-                timestatus: 0,
-                istouch: false,
-                loading: false,
-                ajax: '',
                 cursorx: 0,
                 cursory: 0,
                 timer: null,
@@ -362,13 +306,10 @@
 
             that.mathField.latex(that.value);
 
-            that.initCanvas();
-
             window.onresize = function () {
-                that.initCanvas();
                 var content = $('#mathinput .mq-root-block');
                 content.scrollLeft(content[0].scrollWidth)
-            }
+            };
         },
         methods: {
             /**
@@ -395,7 +336,14 @@
              */
             changepanel(val) {
                 this.panel = val;
-                this.$emit('update:keypanel', val)
+                this.$emit('update:keypanel', val);
+                let keyboardDiv = document.getElementById('keyboard');
+                let height = window.getComputedStyle(keyboardDiv).getPropertyValue("height");
+                console.log(height);
+                try {
+                    $App.keyboardHeight(height);
+                } catch (e) {
+                }
             },
             /**
              * 字母大小写切换
@@ -408,243 +356,13 @@
                 }
             },
             /**
-             * 键盘显示和隐藏
+             * 键盘隐藏
              * @param event
              */
             keyhide(event) {
                 this.$emit('update:show', false);
                 this.$emit('update:output', this.value);
-                this.cleardraw()
-            },
-            initCanvas() {
-                this.canvas = this.$refs.canvas;//指定canvas
-                this.canvasw = document.getElementById('keyboard').clientWidth - 95;
-                this.context = this.canvas.getContext("2d");//设置2D渲染区域
-                this.context.lineWidth = 50;//设置线的宽度
-
-            },
-            canvasDown(event) {
-                this.timestatus = 0;
-                var elem = document.getElementById('write');
-
-                this.offsetLeft = this.pageX(elem);
-                this.offsetTop = this.pageY(elem);
-
-                this.canvasMoveUse = !0;
-                this.tmpArr = [];
-                this.delArr = [];
-                this.isButtonDown = true;
-                this.arrz.push(0);
-                this.arrx.push(Math.floor(event.changedTouches[0].clientX - this.offsetLeft - 38));
-                this.arry.push(Math.floor(event.changedTouches[0].clientY - this.offsetTop));
-
-                if (this.canvasMoveUse) {
-                    var e = event.target,
-                        r = Math.floor(event.touches[0].clientX - this.offsetLeft - 38),
-                        n = Math.floor(event.touches[0].clientY - this.offsetTop);
-
-                    var arr = this.tmpArr;
-                    arr[this.tmpArr.length] = [r, n];
-                    this.tmpArr = arr;
-                }
-            },
-            canvasMove(event) {
-                var _this = this;
-                if (_this.isButtonDown) {
-                    _this.arrz.push(1);
-                    _this.arrx.push(Math.floor(event.changedTouches[0].clientX - this.offsetLeft - 38));
-                    _this.arry.push(Math.floor(event.changedTouches[0].clientY - this.offsetTop));
-                }
-                _this.context.beginPath();
-
-                for (var i = 0; i < _this.arrx.length; i++) {
-                    if (_this.arrz[i] === 0) {
-                        _this.context.moveTo(_this.arrx[i], _this.arry[i])
-                    } else {
-                        _this.context.lineTo(_this.arrx[i], _this.arry[i])
-                    }
-                }
-                _this.context.clearRect(0, 0, _this.canvasw, _this.canvash);
-                _this.lineset();
-                _this.context.stroke();
-                _this.context.closePath();
-
-                if (_this.canvasMoveUse) {
-                    var e = event.target,
-                        r = Math.floor(event.touches[0].clientX - this.offsetLeft - 38),
-                        n = Math.floor(event.touches[0].clientY - this.offsetTop);
-
-                    var arr = _this.tmpArr;
-                    arr[_this.tmpArr.length] = [r, n];
-                    _this.tmpArr = arr;
-                }
-            },
-            canvasUp(e) {
-                var that = this;
-                this.canvasMoveUse = !1;
-                this.isButtonDown = false;
-
-                var arr = this.retArr;
-                arr[this.retArr.length] = this.tmpArr;
-                this.retArr = arr;
-
-                this.timestatus = 1;
-                clearTimeout(this.timeid);
-
-                this.timeid = setTimeout(function () {
-                    console.log(that.timestatus);
-                    if (that.timestatus === 1) {
-                        that.submitArr()
-                    }
-                }, 1000)
-            },
-            //清除画布
-            cleardraw: function () {
-                //清除画布
-                this.arrx = [];
-                this.arry = [];
-                this.arrz = [];
-
-                this.tmpArr = [];
-                this.retArr = [];
-
-                this.timestatus = 0;
-                clearTimeout(this.timeid)
-            },
-            leftdraw() {
-                if (this.retArr.length === 0) {
-                    return
-                }
-                this.timestatus = 0;
-                var that = this;
-                this.delArr.push(that.retArr[that.retArr.length - 1]);
-
-                that.retArr.splice(that.retArr.length - 1, 1);
-
-                this.drawline()
-            },
-            rightdraw() {
-                if (this.delArr.length === 0) {
-                    return
-                }
-                this.timestatus = 0;
-                this.retArr.push(this.delArr[this.delArr.length - 1]);
-                this.delArr.splice(this.delArr.length - 1, 1);
-
-                this.drawline()
-            },
-            drawline() {
-                var that = this;
-                that.arrx = [];
-                that.arry = [];
-                that.arrz = [];
-
-                that.retArr.forEach(function (item, index) {
-                    that.arrz.push(0);
-                    item.forEach(function (items, indexs) {
-                        if (indexs !== 0) {
-                            that.arrz.push(1);
-                        }
-
-                        that.arrx.push(items[0]);
-                        that.arry.push(items[1]);
-                    })
-                });
-
-
-                for (var i = 0; i < that.arrx.length; i++) {
-                    if (that.arrz[i] === 0) {
-                        that.context.moveTo(that.arrx[i], that.arry[i])
-                    } else {
-                        that.context.lineTo(that.arrx[i], that.arry[i])
-                    }
-                }
-                that.lineset();
-                that.context.stroke();
-
-                this.timestatus = 1;
-                clearTimeout(this.timeid);
-
-                this.timeid = setTimeout(function () {
-                    console.log(that.timestatus);
-                    if (that.timestatus === 1) {
-                        that.submitArr()
-                    }
-                }, 1000)
-            },
-            lineset() {
-                this.context.lineWidth = 4;
-                this.context.strokeStyle = '#777';
-                this.context.lineCap = 'round';
-                this.context.lineJoin = 'round';
-            },
-            pageX(elem) {
-                return elem.offsetParent ? elem.offsetLeft + this.pageX(elem.offsetParent) : elem.offsetLeft;
-            },
-            pageY(elem) {
-                return elem.offsetParent ? elem.offsetTop + this.pageY(elem.offsetParent) : elem.offsetTop;
-            },
-            submitArr() {
-                this.loading = true;
-                var that = this;
-                var strokes = that.retArr;
-
-                var scg = 'SCG_INK\n' + strokes.length + '\n';
-
-                strokes.forEach(function (stroke) {
-                    scg += stroke.length + '\n';
-                    stroke.forEach(function (p) {
-                        scg += p[0] + ' ' + p[1] + '\n'
-                    })
-                });
-
-
-                // SCG_INK文件
-                // var blob = new Blob([scg], {
-                //   type: "text/plain;charset=utf-8"
-                // });
-
-                // var params = new FormData();
-                // params.append('file', blob);
-
-                let params = {
-                    strokes: that.arrToStr(that.retArr)
-                };
-
-                if (that.ajax) {
-                    that.ajax.abort()
-                }
-
-                that.ajax = $.ajax({
-                    url: that.url,
-                    method: 'post',
-                    data: params,
-                    dataType: 'json',
-                    // cache: false,
-                    // processData: false,
-                    // contentType: false,
-                    success(res) {
-                        that.loading = false;
-                        console.log(res);
-                        // that.latex = res.data.replace(/COMMA/g,",")
-                        that.$emit('update:value', res.data);
-                        that.mathField.latex(res.data)
-                    }
-                });
-            },
-            arrToStr: function (t) {
-                var e = "";
-                e += "[";
-                for (var r = 0, n = t.length; r < n; r++) {
-                    if (t[r].length > 0) {
-                        e += "[";
-                        for (var i = 0, o = t[r].length; i < o; i++)
-                            t[r][i].length > 0 && (e += "[" + t[r][i][0] + "," + t[r][i][1] + "]", i < o - 1 && (e += ","));
-                        e += "]", r < n - 1 && (e += ",")
-                    }
-                }
-
-                return e += "]"
+                $App.hideKeyboard();
             },
             cursorDown(event) {
                 var _this = this;
@@ -731,7 +449,7 @@
                 this.$emit('update:ctrl', nval)
                 // this.keyhide()
                 // console.log('ctrl'+nval)
-            }
+            },
         }
     };
 </script>
@@ -742,52 +460,26 @@
     box-sizing: content-box !important;
   }
 
-  .math {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    left: 0;
-    top: 0;
-  }
-
   .keyboard-div {
     position: fixed;
-    height: 100vh;
     width: 100vw;
     top: 0;
     left: 0;
     z-index: -1;
   }
 
-  .keyboard-enter-active, .keyboard-leave-active {
-    transition: all .5s;
-  }
-
-  .keyboard-enter, .keyboard-leave-to /* .fade-leave-active below version 2.1.8 */
-  {
-    transform: translateY(340px);
-  }
-
-  .mathview {
-    border: none;
-    border-bottom: 1px solid gray;
-    min-width: 45px;
-    min-height: 22px;
-  }
 
   .keyboard {
+    margin-top: -8px;
     width: 100%;
     position: fixed;
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 4px;
     left: 0;
-    bottom: -340px;
     background-color: #F1F1F1;
     z-index: 16777271;
     transition: all 0.5s;
-  }
-
-  .keyboardup {
-    bottom: 0;
-    padding-bottom: 10px;
   }
 
   .keyboard-output {
@@ -795,11 +487,9 @@
     margin: 3px 2px;
     position: relative;
     background-color: #fff;
-
   }
 
   .keyboard-output > span {
-    display: block;
     width: calc(100vw - 48px);
     min-height: 42px;
     border: none;
@@ -874,6 +564,7 @@
   }
 
   .keyboard-panel-letter {
+    margin-top: -5px;
     width: calc(100% - 4px);
     padding: 2px;
   }
@@ -887,7 +578,6 @@
     background-color: #F7F7F7;
     margin-left: 4px;
     margin-top: 4px;
-    margin-bottom: 4px;
     flex: 1;
   }
 
@@ -973,7 +663,6 @@
     width: calc((100vw - 49px) / 10);
     margin-right: 5px;
     background-color: #fff;
-    box-shadow: 0px 0px 3px rgba(133, 137, 141, 0.5215686274509804);
   }
 
   .keyboard-panel-letter ul li:last-child {
@@ -988,7 +677,6 @@
 
   .keyboard-default-symbol {
     width: calc((100vw - 14px) / 3);
-    margin-top: 5px;
     margin-right: 5px;
     float: left;
   }
@@ -1027,6 +715,7 @@
   .keyboard-default-num {
     width: calc((100vw + 1px) / 2);
     float: left;
+    margin-top: -5px;
   }
 
   .keyboard-default-num ul li {
@@ -1040,6 +729,8 @@
   .keyboard-default-right {
     width: calc((100vw - 29px) / 6);
     float: left;
+    background-color: #F7F7F7;
+    border-radius: 4px;
   }
 
   .keyboard-default-right ul li {
@@ -1048,7 +739,6 @@
 
   .keyboard-symbol-left {
     width: calc((500vw - 25px) / 6);
-    margin-top: 10px;
     margin-right: 5px;
     float: left;
   }
@@ -1058,7 +748,6 @@
     overflow-y: scroll;
     background-color: #F7F7F7;
     border-radius: 5px;
-    background-color: #fff;
   }
 
   .keyboard-panel-symbol {
@@ -1102,16 +791,7 @@
     display: none !important;
   }
 
-  .mathview .mq-cursor {
-    display: none !important;
-  }
-
-  .keyboard-output .mq-root-block {
-    /* position: absolute;
-    top: 50%; */
-    /* transform: translateY(-50%); */
-    border: 2px #0099FF;
-    border-radius: 5px;
+  .keyboard-output {
   }
 
 </style>

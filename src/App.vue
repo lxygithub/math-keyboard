@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <div v-on:click="show = !show">
+<!--    <div v-on:click="show = !show">-->
+    <div style="display: none">
       <math-render :value.sync="value" :imgshow='!show'></math-render>
       <code @click="a">latex: {{value}}</code>
     </div>

@@ -1,4 +1,4 @@
-<template>
+<template >
   <div class="math-render">
     <span :id="mathview" class="mathview"></span>
     <img :src="img.penicon" v-if="imgshow && !value"/>
@@ -26,7 +26,7 @@
             }
         },
         mounted() {
-            var that = this
+            var that = this;
             var mathview = document.getElementById(this.mathview);
 
             var MQ = MathQuill.getInterface(2);
@@ -38,7 +38,7 @@
         watch: {
             value: function (val) {
                 this.viewField.latex(val);
-                $App.outputLatex(val)
+                $App.outputLatex('$'+val+'$')
             }
         }
     };
