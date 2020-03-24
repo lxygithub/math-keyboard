@@ -72,7 +72,7 @@
       </div>
       <div class="keyboard-bottom">
         <ul>
-          <li @click="changepanel(panel===1?3:1)" style="font-size: 15px;">{{panel===1?'abc':'123'}}
+          <li @click="changepanel(panel===1?3:1)" style="font-size: 14px;">{{panel===1?'abc':'123'}}
           </li>
           <li v-for="item in keyBottomSym"
               @click="item.v==='hide'?keyhide():insertar(item.v)"
@@ -594,7 +594,6 @@
 
   .keyboard-bottom {
     position: center;
-    padding-right: 2px;
   }
 
 
@@ -603,6 +602,10 @@
     margin-left: 4px;
     margin-top: 4px;
     width: calc((100vw - 28px) / 6);
+  }
+
+  .keyboard-bottom li:nth-child(5) {
+    width: calc((100vw - 28px) / 6 - 2px);
   }
 
   .keyboard-panel .letter-row {
@@ -757,9 +760,6 @@
 
   .keyboard-default-num ul li:nth-child(3) {
     margin-top: 0;
-  }
-
-  .keyboard-default-num ul li:nth-child(3) {
     margin-right: 0;
   }
 
@@ -776,7 +776,7 @@
   }
 
   .keyboard-default-num ul li:nth-child(10) {
-    width: calc((100vw - 28px) / 3 + 2px);
+    width: calc((100vw - 28px) / 3 + 3px);
   }
 
   .keyboard-default-right {
