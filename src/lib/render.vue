@@ -38,7 +38,10 @@
         watch: {
             value: function (val) {
                 this.viewField.latex(val);
-                $App.outputLatex('$'+val+'$')
+                try {
+                    $App.outputLatex('$' + val + '$')
+                } catch (e) {
+                }
             }
         }
     };

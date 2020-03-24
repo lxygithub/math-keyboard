@@ -2,13 +2,16 @@
   <div class="keyboard" :class="{'keyboardup':show}" id="keyboard">
     <div class="keyboard-div" @click="keyhide()" v-show="show && bgshow"></div>
     <div class="keyboard-output">
-        <span :id="mathinput"
-              class="editor"
-              style="background:#fff;border:2px solid #0099FF;border-radius:4px;width: 75%"
-              @touchstart="cursorDown($event)"
-              @touchmove="cursorMove($event)"
-              @touchup="cursorUp($event)">
-        </span>
+      <span :id="mathinput"
+            class="editor"
+            @touchstart="cursorDown($event)"
+            @touchmove="cursorMove($event)"
+            @touchup="cursorUp($event)">
+      </span>
+      <div class="left-right">
+        <img :src="img.cursor_left" @click="cursorLeft($event)" style=""/>
+        <img :src="img.cursor_right" @click="cursorRight($event)" style="margin-left: 20px"/>
+      </div>
       <a @click="keyhide()" style="width: 15%">确定</a>
     </div>
     <div class="keyboard-panel" id="keyboard-panel"
@@ -38,7 +41,8 @@
         </div>
         <div class="keyboard-default-right">
           <ul>
-            <li @touchstart="backDown('Backspace')" @touchend="backUp('Backspace')" style="background-color: #F7F7F7;margin-top: 0px"><img :src="img.back"/></li>
+            <li @touchstart="backDown('Backspace')" @touchend="backUp('Backspace')"
+                style="background-color: #F7F7F7;margin-top: 0px"><img :src="img.back"/></li>
             <li v-for="item in keyboardRight"
                 @click="insertar(item.v)"
                 @touchstart="item.t = true"
@@ -68,12 +72,13 @@
       </div>
       <div class="keyboard-bottom">
         <ul>
-          <li @click="changepanel(panel===1?3:1)" style="font-size: 15px;margin-left: 0px">{{panel===1?'abc':'123'}}</li>
+          <li @click="changepanel(panel===1?3:1)" style="font-size: 15px;">{{panel===1?'abc':'123'}}
+          </li>
           <li v-for="item in keyBottomSym"
               @click="item.v==='hide'?keyhide():insertar(item.v)"
               @touchstart="item.t = true"
               @touchend="item.t = false"
-              :style="{'background-color':item.t?'#bababa':'#fff'}">
+              :style="{'background-color':item.t?'#bababa':'#F7F7F7'}">
             <div class="letter-shade"></div>
             <img :src="item.i" v-if="item.i"/>{{item.k}}
           </li>
@@ -364,10 +369,21 @@
                 this.$emit('update:output', this.value);
                 $App.hideKeyboard();
             },
+            cursorLeft(event) {
+                this.mathField.keystroke("Left");
+                this.cursorx = event.changedTouches[0].clientX;
+                console.log("Left")
+            },
+            cursorRight(event) {
+                this.mathField.keystroke("Right");
+                this.cursorx = event.changedTouches[0].clientX;
+                console.log("Right")
+            },
+            cursorUp(event) {
+                var _this = this
+            },
             cursorDown(event) {
                 var _this = this;
-                // console.log(event.changedTouches[0].clientX)
-
                 _this.cursorx = event.changedTouches[0].clientX;
                 _this.cursory = event.changedTouches[0].clientY;
             },
@@ -378,26 +394,29 @@
                 if (x > 10) {
                     this.mathField.keystroke("Left");
                     this.cursorx = event.changedTouches[0].clientX;
+                    console.log("Left")
                 }
 
                 if (x < -10) {
                     this.mathField.keystroke("Right");
                     this.cursorx = event.changedTouches[0].clientX;
+                    console.log("Right")
                 }
 
                 if (y > 10) {
                     this.mathField.keystroke("Up");
                     this.cursory = event.changedTouches[0].clientY;
+                    console.log("Up")
                 }
 
                 if (y < -10) {
                     this.mathField.keystroke("Down");
                     this.cursory = event.changedTouches[0].clientY;
+                    console.log("Down")
                 }
+
             },
-            cursorUp(event) {
-                var _this = this
-            },
+
             insertCursorNode(x, y) {
                 var cursor = this.mathField.__controller.cursor;
 
@@ -468,13 +487,18 @@
     z-index: -1;
   }
 
+  #mathinput {
+    margin: 3px;
+    background: #fff;
+    border: 2px solid #0099FF;
+    border-radius: 4px;
+    width: 65%
+  }
 
   .keyboard {
     margin-top: -8px;
-    width: 100%;
+    width: auto;
     position: fixed;
-    padding-top: 4px;
-    padding-right: 4px;
     padding-bottom: 4px;
     left: 0;
     background-color: #F1F1F1;
@@ -484,8 +508,8 @@
 
   .keyboard-output {
     width: calc(100% - 4px);
-    margin: 3px 2px;
     position: relative;
+    padding: 2px;
     background-color: #fff;
   }
 
@@ -564,21 +588,21 @@
   }
 
   .keyboard-panel-letter {
-    margin-top: -5px;
-    width: calc(100% - 4px);
-    padding: 2px;
+    width: 100vw;
+    position: center;
   }
 
-  .keyboard-bottom ul {
-    width: 100%;
-    display: flex;
+  .keyboard-bottom {
+    position: center;
+    padding-right: 2px;
   }
+
 
   .keyboard-bottom li {
     background-color: #F7F7F7;
     margin-left: 4px;
     margin-top: 4px;
-    flex: 1;
+    width: calc((100vw - 28px) / 6);
   }
 
   .keyboard-panel .letter-row {
@@ -628,8 +652,8 @@
   }
 
   .keyboard-panel-default {
-    padding: 2px;
     float: left;
+    margin: 4px 4px 0 4px;
   }
 
   .keyboard-panel ul {
@@ -671,13 +695,12 @@
 
   .keyboard-panel-default ul li {
     width: calc((100vw - 29px) / 6);
-    margin-top: 5px;
-    margin-right: 5px;
+    margin-top: 4px;
   }
 
   .keyboard-default-symbol {
-    width: calc((100vw - 14px) / 3);
-    margin-right: 5px;
+    width: calc((100vw - 16px) / 3);
+    margin-right: 4px;
     float: left;
   }
 
@@ -713,22 +736,52 @@
   }
 
   .keyboard-default-num {
-    width: calc((100vw + 1px) / 2);
+    width: calc((100vw - 16px) / 2);
     float: left;
-    margin-top: -5px;
+    margin-right: 4px;
   }
 
   .keyboard-default-num ul li {
     background-color: #fff;
+    margin-right: 4px;
+    width: calc(((100vw - 20px) / 2 - 8px) / 3);
+  }
+
+  .keyboard-default-num ul li:nth-child(1) {
+    margin-top: 0;
+  }
+
+  .keyboard-default-num ul li:nth-child(2) {
+    margin-top: 0;
+  }
+
+  .keyboard-default-num ul li:nth-child(3) {
+    margin-top: 0;
+  }
+
+  .keyboard-default-num ul li:nth-child(3) {
+    margin-right: 0;
+  }
+
+  .keyboard-default-num ul li:nth-child(6) {
+    margin-right: 0;
+  }
+
+  .keyboard-default-num ul li:nth-child(9) {
+    margin-right: 0;
+  }
+
+  .keyboard-default-num ul li:nth-child(11) {
+    margin-right: 0;
   }
 
   .keyboard-default-num ul li:nth-child(10) {
-    width: calc((100vw - 14px) / 3);
+    width: calc((100vw - 28px) / 3 + 2px);
   }
 
   .keyboard-default-right {
-    width: calc((100vw - 29px) / 6);
-    float: left;
+    width: calc((100vw - 16px) / 6 - 2px);
+    float: right;
     background-color: #F7F7F7;
     border-radius: 4px;
   }
@@ -737,22 +790,11 @@
     background-color: #F7F7F7;
   }
 
-  .keyboard-symbol-left {
-    width: calc((500vw - 25px) / 6);
-    margin-right: 5px;
-    float: left;
-  }
-
   .keyboard-symbol-left > ul {
     height: 146px;
     overflow-y: scroll;
     background-color: #F7F7F7;
     border-radius: 5px;
-  }
-
-  .keyboard-panel-symbol {
-    padding: 2px;
-    float: left;
   }
 
   .keyboard-panel-symbol ul li {
@@ -792,6 +834,20 @@
   }
 
   .keyboard-output {
+    position: relative;
+  }
+
+  .left-right {
+    position: absolute;
+    display: inline-block;
+    margin-left: calc(65% + 15px);
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .left-right img {
+    width: 15px;
+    height: 15px;
   }
 
 </style>

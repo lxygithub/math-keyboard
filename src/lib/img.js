@@ -25,5 +25,7 @@ export default {
   _pi: require('../../static/img/pi.svg'),
   or: require('../../static/img/or.svg'),
   union: require('../../static/img/union.svg'),
-  penicon: require('../../static/img/penicon.png')
+  penicon: require('../../static/img/penicon.png'),
+  cursor_left: require('../../static/img/cursor_left.svg'),
+  cursor_right: require('../../static/img/cursor_right.svg')
 }
