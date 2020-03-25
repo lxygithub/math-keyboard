@@ -1,20 +1,18 @@
 <template>
-  <div class="keyboard" :class="{'keyboardup':show}" id="keyboard">
-    <div class="keyboard-div" @click="keyhide()" v-show="show && bgshow"></div>
+  <div class="keyboard" id="keyboard">
     <div class="keyboard-output">
       <span :id="mathinput"
-            class="editor"
             @touchstart="cursorDown($event)"
             @touchmove="cursorMove($event)"
             @touchup="cursorUp($event)">
       </span>
       <div class="left-right">
-        <img :src="img.cursor_left" @click="cursorLeft($event)" style=""/>
+        <img :src="img.cursor_left" @click="cursorLeft($event)"/>
         <img :src="img.cursor_right" @click="cursorRight($event)" style="margin-left: 20px"/>
       </div>
       <a @click="keyhide()" style="width: 15%">确定</a>
     </div>
-    <div class="keyboard-panel" id="keyboard-panel"
+    <div class="keyboard-panel"
          :style="{display:keyorwrite === 1 ? 'unset':'none'}">
       <div class="keyboard-panel-default" v-if="panel === 1">
         <div class="keyboard-default-symbol">
@@ -267,10 +265,6 @@
         props: {
             show: Boolean,
             value: String,
-            bgshow: {
-                type: Boolean,
-                default: true
-            },
             keypanel: {
                 type: Number,
                 default: 1
@@ -292,15 +286,11 @@
                 restrictMismatchedBrackets: true,
                 sumStartsWithNEquals: true,
                 supSubsRequireOperand: true,
-                //charsThatBreakOutOfSupSub: '+-=<>',
                 autoSubscriptNumerals: true,
                 autoOperatorNames: 'sin COMMA',
                 handlers: {
                     edit: function (mathField) {
-                        // var texto = mathField.text();
-
                         that.$emit('update:value', mathField.latex());
-
                         //显示光标
                         const controller = mathField.__controller;
                         controller.cursor.show();
@@ -329,11 +319,8 @@
                     that.mathField.keystroke(valor);
                 } else {
                     that.mathField.cmd(valor);
-
-                    // 我真特么机智。。。。
-                    // that.mathField.keystroke("Left");
-                    // that.mathField.keystroke("Right");
                 }
+
             },
             /**
              * 键盘布局切换
@@ -417,25 +404,6 @@
 
             },
 
-            insertCursorNode(x, y) {
-                var cursor = this.mathField.__controller.cursor;
-
-                var root = $("#mathinput .mq-root-block")[0];
-                // var root = document.getElementsByClassName('mq-root-block')
-
-                console.log('root', root);
-                var firstChildBounds = root.firstChild.getBoundingClientRect();
-                var lastChildBounds = root.lastChild.getBoundingClientRect();
-
-                const left = firstChildBounds.left;
-                const right = lastChildBounds.right;
-
-                if (Math.abs(x - right) < Math.abs(x - left)) {
-                    cursor.insAtRightEnd(this.mathField.__controller.root);
-                } else {
-                    cursor.insAtLeftEnd(this.mathField.__controller.root);
-                }
-            },
             backDown(val) {
                 var _this = this;
                 if (val === 'Backspace') {
@@ -479,14 +447,6 @@
     box-sizing: content-box !important;
   }
 
-  .keyboard-div {
-    position: fixed;
-    width: 100vw;
-    top: 0;
-    left: 0;
-    z-index: -1;
-  }
-
   #mathinput {
     margin: 3px;
     background: #fff;
@@ -513,23 +473,30 @@
     background-color: #fff;
   }
 
-  .keyboard-output > span {
-    width: calc(100vw - 48px);
-    min-height: 42px;
-    border: none;
-    font-size: 16px;
-    padding-left: 3px;
-    display: flex;
-    align-items: center;
+  .left-right {
+    position: absolute;
+    display: block;
+    margin-left: calc(65% + 15px);
+    top: 50%;
+    transform: translateY(-50%);
   }
 
-  .keyboard-output > svg {
-    width: 24px;
-    min-height: 42px;
-    color: rgb(201, 201, 201);
-    padding-right: 10px;
+  .left-right img {
+    width: 15px;
+    height: 15px;
+  }
+
+  .keyboard-output > a {
+    display: block;
+    text-decoration: none;
+    line-height: 40px;
+    width: 42px;
+    text-align: center;
+    background-color: #fff;
+    color: #2e7bfd;
+    font-size: 15px;
     position: absolute;
-    right: 42px;
+    right: 2px;
     top: 50%;
     transform: translateY(-50%);
   }
@@ -562,29 +529,6 @@
       stroke-dasharray: 90, 150;
       stroke-dashoffset: -120;
     }
-  }
-
-  .keyboard-output > svg circle {
-    stroke: currentColor;
-    stroke-width: 3;
-    stroke-linecap: round;
-    -webkit-animation: van-circular 1.5s ease-in-out infinite;
-    animation: van-circular 1.5s ease-in-out infinite;
-  }
-
-  .keyboard-output > a {
-    display: block;
-    text-decoration: none;
-    line-height: 42px;
-    width: 42px;
-    text-align: center;
-    background-color: #fff;
-    color: #2e7bfd;
-    font-size: 15px;
-    position: absolute;
-    right: 2px;
-    top: 50%;
-    transform: translateY(-50%);
   }
 
   .keyboard-panel-letter {
@@ -833,21 +777,5 @@
     display: none !important;
   }
 
-  .keyboard-output {
-    position: relative;
-  }
-
-  .left-right {
-    position: absolute;
-    display: inline-block;
-    margin-left: calc(65% + 15px);
-    top: 50%;
-    transform: translateY(-50%);
-  }
-
-  .left-right img {
-    width: 15px;
-    height: 15px;
-  }
 
 </style>
