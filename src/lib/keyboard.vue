@@ -352,7 +352,7 @@
              * @param event
              */
             keyhide(event) {
-                this.$emit('update:show', false);
+                // this.$emit('update:show', false);
                 this.$emit('update:output', this.value);
                 $App.hideKeyboard();
             },
@@ -448,11 +448,16 @@
   }
 
   #mathinput {
-    margin: 3px;
+    margin-left: 3px;
     background: #fff;
     border: 2px solid #0099FF;
     border-radius: 4px;
-    width: 65%
+    width: 60%;
+    height: 30px;
+    display: block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   .keyboard {
@@ -469,6 +474,7 @@
   .keyboard-output {
     width: calc(100% - 4px);
     position: relative;
+    height: 50px;
     padding: 2px;
     background-color: #fff;
   }
