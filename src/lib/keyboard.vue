@@ -10,7 +10,7 @@
         <img :src="img.cursor_left" @click="cursorLeft($event)"/>
         <img :src="img.cursor_right" @click="cursorRight($event)" style="margin-left: 20px"/>
       </div>
-      <a @click="keyhide()" style="width: 15%">确定</a>
+      <a @click="confirm()" style="width: 15%">确定</a>
     </div>
     <div class="keyboard-panel"
          :style="{display:keyorwrite === 1 ? 'unset':'none'}">
@@ -305,8 +305,15 @@
                 var content = $('#mathinput .mq-root-block');
                 content.scrollLeft(content[0].scrollWidth)
             };
+            //将要给原生调用的方法挂载到 window 上面
+            window.clearInputArea = this.clearInputArea
         },
         methods: {
+            clearInputArea() {
+                console.log('clearInputArea called!!');
+                this.value = "";
+                this.mathField.latex('');
+            },
             /**
              * 插入符号
              * @param valor
@@ -347,6 +354,7 @@
                     this.capsletter = 'letter'
                 }
             },
+
             /**
              * 键盘隐藏
              * @param event
@@ -355,6 +363,17 @@
                 // this.$emit('update:show', false);
                 this.$emit('update:output', this.value);
                 $App.hideKeyboard();
+            },
+            /**
+             * 确定
+             * @param event
+             */
+            confirm(event) {
+                try {
+                    $App.confirm();
+                } catch (e) {
+                }
+                this.keyhide(event);
             },
             cursorLeft(event) {
                 this.mathField.keystroke("Left");
@@ -453,7 +472,6 @@
     border: 2px solid #0099FF;
     border-radius: 4px;
     width: 60%;
-    height: 30px;
     display: block;
     position: absolute;
     top: 50%;

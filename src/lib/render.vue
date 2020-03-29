@@ -1,4 +1,4 @@
-<template >
+<template>
   <div class="math-render">
     <span :id="mathview" class="mathview"></span>
     <img :src="img.penicon" v-if="imgshow && !value"/>
@@ -39,7 +39,7 @@
             value: function (val) {
                 this.viewField.latex(val);
                 try {
-                    $App.outputLatex('$' + val + '$')
+                    $App.outputLatex(val)
                 } catch (e) {
                 }
             }
