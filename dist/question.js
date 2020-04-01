@@ -18,9 +18,14 @@ function createTextSpan(text) {
   return span;
 };
 
-function createBlankSpan(index) {
+function createBlankSpan(index, reply) {
   var id = "input_result" + index;
-  var span = '<span id=' + id + ' class="latex_input" onclick="spanClick(' + index + ')"></span>'
+  console.log('-----------------' + reply);
+  if (reply) {
+    var span = '<span id=' + id + ' class="latex_input" onclick="spanClick(' + index + ')">' + reply + '</span>'
+  } else {
+    var span = '<span id=' + id + ' class="latex_input" onclick="spanClick(' + index + ')"></span>'
+  }
   // var span = document.createElement('span');
   // span.id = "input_result" + index;
   // span.className = "latex_input";
@@ -65,7 +70,7 @@ let Model = {
   model_type: 0
 };
 
-function questionTrans2Html(questionStr, blank) {
+function questionTrans2Html(questionStr, blank, replies) {
   questionStr =
     "  (1) $x^{2}/cdot x^{5}=$____.\n" +
     "  (2)$a/cdot a^{6}=$____.\n" +
@@ -73,8 +78,12 @@ function questionTrans2Html(questionStr, blank) {
     "  (4)$x^{m}/cdot x^{3m+1}=$____.";
   blank = '____';
 
-  // questionStr = Base64.decode(questionStr);
+  questionStr = Base64.decode(questionStr);
 
+
+  if (replies) {
+    replies = Base64.decode(replies).split("|");
+  }
   let modelArr = new Array();
   let split = questionStr.split(blank);
   for (var i = 0; i < split.length; i++) {
@@ -99,7 +108,11 @@ function questionTrans2Html(questionStr, blank) {
     if (newVar.model_type === 0) {
       domStrArr[j] = dom2String(createTextSpan(newVar.content));
     } else {
-      domStrArr[j] = dom2String(createBlankSpan(m));
+      if (replies) {
+        domStrArr[j] = dom2String(createBlankSpan(m, replies[m]));
+      } else {
+        domStrArr[j] = dom2String(createBlankSpan(m));
+      }
       ++m;
     }
   }
@@ -138,9 +151,10 @@ function getAllInputs() {
   if (blankSpanArr !== null) {
     let result = '';
     for (var blankSpan of blankSpanArr) {
-      result += (blankSpan.title + '|');
+      result += (blankSpan.title + ' ');
     }
     console.log(result);
+    window.Question.getAllInputs(Base64.encode(result));
   }
 
 };

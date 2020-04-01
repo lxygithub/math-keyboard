@@ -28,8 +28,11 @@
 </head>
 <body>
 <div id="div_question" style="position: relative">
-  <span title="sfasdfaf" onclick="questionTrans2Html('','')">计算： </span>
-
+  <span>计算：<br>(1)$(\frac{1}{2})^{5}\times(\frac {1}{2})^{8}=$ </span>
+  <span><span id="input_result0" class="latex_input" onclick="spanClick(0)"></span></span>
+  <span>；<br>(2)$(-2)^{2}\times(-2)^{7}=$ </span><span><span id="input_result1" class="latex_input" onclick="spanClick(1)"></span></span>
+  <span>；<br>(3)$a^{2}\cdot a^{3}\cdot a^{6}=$ </span><span><span id="input_result2" class="latex_input" onclick="spanClick(2)"></span></span>
+  <span>；<br>(4)$(-y)^{3}\cdot y^{4}=$ </span><span><span id="input_result3" class="latex_input" onclick="spanClick(3)"></span></span><span>.</span>
 </div>
 </body>
 <style>
@@ -40,9 +43,17 @@
     border-left: 0;
     border-right: 0;
     outline: none;
-    min-width: 100px;
+    min-width: 50px;
     min-height: 30px;
-    margin-top: 5px;
+    text-align: center;
+  }
+  * {
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+    -khtml-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
   }
 
 </style>
