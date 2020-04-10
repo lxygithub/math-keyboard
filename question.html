@@ -22,17 +22,16 @@
       showMathMenu: false //关闭右击菜单显示
     }
     });
+
   </script>
   <script src="./dist/jquery-2.1.4.min.js"></script>
   <script type="text/javascript" src="./dist/question.js"></script>
 </head>
 <body>
 <div id="div_question" style="position: relative">
-  <span>计算：<br>(1)$(\frac{1}{2})^{5}\times(\frac {1}{2})^{8}=$ </span>
-  <span><span id="input_result0" class="latex_input" onclick="spanClick(0)"></span></span>
-  <span>；<br>(2)$(-2)^{2}\times(-2)^{7}=$ </span><span><span id="input_result1" class="latex_input" onclick="spanClick(1)"></span></span>
-  <span>；<br>(3)$a^{2}\cdot a^{3}\cdot a^{6}=$ </span><span><span id="input_result2" class="latex_input" onclick="spanClick(2)"></span></span>
-  <span>；<br>(4)$(-y)^{3}\cdot y^{4}=$ </span><span><span id="input_result3" class="latex_input" onclick="spanClick(3)"></span></span><span>.</span>
+  <span class="latex_input" onclick="setBlankSpansTextColor('[0]');">
+$\int{\}dx={}$
+  </span>
 </div>
 </body>
 <style>
@@ -47,13 +46,18 @@
     min-height: 30px;
     text-align: center;
   }
+
+  .latex_input:hover {
+    border-bottom: 1px solid #0099FF;
+  }
+
   * {
-    -webkit-touch-callout:none;
-    -webkit-user-select:none;
-    -khtml-user-select:none;
-    -moz-user-select:none;
-    -ms-user-select:none;
-    user-select:none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 
 </style>

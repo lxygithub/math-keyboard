@@ -150,14 +150,42 @@ function questionTrans2Html(questionStr, blank, replies) {
 function getAllInputs() {
   if (blankSpanArr !== null) {
     let result = '';
-    for (var blankSpan of blankSpanArr) {
-      result += (blankSpan.title + ' ');
+    for (var i = 0; i < blankSpanArr.length; i++) {
+      let blankSpan = blankSpanArr[i];
+      if (i < blankSpanArr.length - 1) {
+        result += (blankSpan.title + ' ');
+      } else {
+        result += (blankSpan.title);
+      }
     }
     console.log(result);
     window.Question.getAllInputs(Base64.encode(result));
   }
 
 };
+
+/**
+ * 设置填空颜色
+ * @param resultArr
+ */
+function setBlankSpansTextColor(resultArr) {
+  resultArr = JSON.stringify(resultArr)
+    .replace('[','')
+    .replace(']','')
+    .replace(/\"/g, "")
+    .split(',');
+console.log(resultArr);
+  let blankSpans = document.getElementsByClassName("latex_input");
+  for (let i = 0; i < blankSpans.length; i++) {
+    if (resultArr[i] == 1) {//正确
+      blankSpans[i].style.cssText = "color:#0f0";
+    } else {//错误
+      blankSpans[i].style.cssText = "color:#00f;";
+    }
+  }
+
+};
+
 /**
  *
  *  Base64 encode / decode

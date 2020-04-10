@@ -285,7 +285,7 @@
                 leftRightIntoCmdGoes: 'up',
                 restrictMismatchedBrackets: true,
                 sumStartsWithNEquals: true,
-                supSubsRequireOperand: true,
+                supSubsRequireOperand: false,
                 autoSubscriptNumerals: true,
                 autoOperatorNames: 'sin COMMA',
                 handlers: {
@@ -322,6 +322,12 @@
                 var that = this;
                 if (valor.includes("^2") || valor.includes("^3")) {
                     that.mathField.write(valor);
+                    that.mathField.keystroke("Left");
+                    that.mathField.keystroke("Left");
+                    that.mathField.keystroke("Left");
+                } else if (valor.includes("^")) {
+                    that.mathField.cmd(valor);
+                    that.mathField.keystroke("Left");
                 } else if (valor === 'Backspace') {
                     that.mathField.keystroke(valor);
                 } else {

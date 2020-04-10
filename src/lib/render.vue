@@ -33,15 +33,24 @@
 
             var viewField = that.viewField = MQ.MathField(mathview);
 
-            viewField.latex(that.value)
+            viewField.latex(that.value);
+
         },
         watch: {
+
             value: function (val) {
+                console.log(val);
                 this.viewField.latex(val);
                 try {
                     $App.outputLatex(val)
                 } catch (e) {
                 }
+
+                let cursor = $('.mq-cursor');
+                let span = document.createElement('span');
+                span.className = 'mq-supsub mq-empty';
+                span.setAttribute('mathquill-command-id','26');
+                cursor.insertAfter(span);
             }
         }
     };
@@ -73,7 +82,21 @@
     display: none !important;
   }
 
-  .mathview .mq-cursor {
+  .mathview {
     display: none !important;
   }
+
+  .mq-empty {
+    background: rgb(225,243,255) !important;
+    border: 1px solid rgb(112,191,248);
+  }
+  .mq-cursor-box{
+    border: 1px solid rgb(112,191,248);
+    background: rgb(225,243,255);
+    width: 10px;
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+  }
+
 </style>
