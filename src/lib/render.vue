@@ -46,11 +46,11 @@
                 } catch (e) {
                 }
 
-                let cursor = $('.mq-cursor');
-                let span = document.createElement('span');
-                span.className = 'mq-supsub mq-empty';
-                span.setAttribute('mathquill-command-id','26');
-                cursor.insertAfter(span);
+                // let cursor = $('.mq-cursor');
+                // let span = document.createElement('span');
+                // span.className = 'mq-supsub mq-empty';
+                // span.setAttribute('mathquill-command-id','26');
+                // cursor.insertAfter(span);
             }
         }
     };
@@ -89,6 +89,7 @@
   .mq-empty {
     background: rgb(225,243,255) !important;
     border: 1px solid rgb(112,191,248);
+    min-width: 15px !important;
   }
   .mq-cursor-box{
     border: 1px solid rgb(112,191,248);

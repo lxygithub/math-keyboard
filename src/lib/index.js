@@ -82,7 +82,7 @@ function questionTrans2Html(questionStr, blank) {
   questionStr = '____sadosadjglajsdlgjapodspt____paodpgujp____adjgpjaposjdgpojahrm{C}$。____';
   blank = '____';
 
-  let modelArr = new Array();
+  let modelArr = [];
   let split = questionStr.split(blank);
   for (var i = 0; i < split.length; i++) {
     let s = split[i];
