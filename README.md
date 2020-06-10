@@ -1,11 +1,13 @@
 # math-keyboard
 
-> 基于vue项目的移动端数学公式键盘
+> 基于vue项目的移动端latex数学公式键盘(仿洋葱学院)
 >
 > fork from: https://github.com/MilkyMoon/math-keyboard
->做了一些修改
+>做了一些修改，去掉了手写功能，注释了一些不常用的符号。
 
-[演示地址](http://www.codwiki.cn/laboratory/keyboard)
+[原项目演示地址](http://www.codwiki.cn/laboratory/keyboard)
+
+![效果图](screenshot/TIM截图20200610152730.png)
 
 
 ### 插件的安装
